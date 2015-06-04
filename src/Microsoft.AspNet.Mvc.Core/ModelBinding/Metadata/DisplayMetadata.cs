@@ -1,6 +1,7 @@
 // Copyright (c) .NET Foundation. All rights reserved.
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
@@ -28,10 +29,10 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
         public string DataTypeName { get; set; }
 
         /// <summary>
-        /// Gets or sets a model description.
+        /// Gets or sets a delegate used for getting the model description.
         /// See <see cref="ModelMetadata.Description"/>
         /// </summary>
-        public string Description { get; set; }
+        public Func<string, string> Description { get; set; }
 
         /// <summary>
         /// Gets or sets a display format string for the model.
@@ -40,10 +41,10 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
         public string DisplayFormatString { get; set; }
 
         /// <summary>
-        /// Gets or sets a display name for the model.
+        /// Gets or sets a delegate used for getting the display name for the model.
         /// See <see cref="ModelMetadata.DisplayName"/>
         /// </summary>
-        public string DisplayName { get; set; }
+        public Func<string, string> DisplayName { get; set; }
 
         /// <summary>
         /// Gets or sets an edit format string for the model.
