@@ -184,7 +184,7 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
                     return null;
                 }
 
-                return DisplayMetadata.Description(PropertyName);
+                return DisplayMetadata.Description();
             }
         }
 
@@ -207,7 +207,7 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
                     return null;
                 }
 
-                return DisplayMetadata.DisplayName(PropertyName);
+                return DisplayMetadata.DisplayName();
             }
         }
 

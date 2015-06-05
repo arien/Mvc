@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using System.Threading;
+using Microsoft.AspNet.Testing;
 using Microsoft.Framework.Internal;
 using Xunit;
 
@@ -418,6 +420,60 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
 
             // Assert
             Assert.Equal("description", result);
+        }
+
+        [Fact]
+        public void DisplayName_FromResources_GetsRecomputed()
+        {
+            // Arrange
+            var display = new DisplayAttribute()
+            {
+                Name = nameof(TestResources.DisplayAttribute_Name2),
+                ResourceType = typeof(TestResources),
+            };
+
+            var provider = CreateProvider(new[] { display });
+            var metadata = provider.GetMetadataForType(typeof(string));
+            var currentCulture = Thread.CurrentThread.CurrentUICulture;
+
+            // Act & Assert
+            var result = metadata.DisplayName;
+            Assert.Equal("name from resources" + currentCulture.Name, result);
+
+            var cultureString = "fr-FR";
+            using (new CultureReplacer(uiCulture: cultureString))
+            {
+                // Reading it again ensures that we recompute.
+                result = metadata.DisplayName;
+                Assert.Equal("name from resources" + cultureString, result);
+            }
+        }
+
+        [Fact]
+        public void Description_FromResources_GetsRecomputed()
+        {
+            // Arrange
+            var display = new DisplayAttribute()
+            {
+                Description = nameof(TestResources.DisplayAttribute_Description2),
+                ResourceType = typeof(TestResources),
+            };
+
+            var provider = CreateProvider(new[] { display });
+            var metadata = provider.GetMetadataForType(typeof(string));
+            var currentCulture = Thread.CurrentThread.CurrentUICulture;
+
+            // Act & Assert
+            var result = metadata.Description;
+            Assert.Equal("description from resources" + currentCulture.Name, result);
+
+            var cultureString = "fr-FR";
+            using (new CultureReplacer(uiCulture: cultureString))
+            {
+                // Reading it again ensures that we recompute.
+                result = metadata.Description;
+                Assert.Equal("description from resources" + cultureString, result);
+            }
         }
 
         [Fact]
@@ -940,6 +996,16 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
             public int UserName { get; set; }
 
             public int NotIncludedOrExcluded { get; set; }
+        }
+
+        private class ResourceType
+        {
+            public string Key { get; set; }
+        }
+        private class LocalizedDisplay
+        {
+            [Display(Name = "Key", ResourceType = typeof(ResourceType))]
+            public int LocalizedProperty { get; set; }
         }
 
         private class RequiredMember
