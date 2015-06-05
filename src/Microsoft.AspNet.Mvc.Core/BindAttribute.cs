@@ -30,13 +30,17 @@ namespace Microsoft.AspNet.Mvc
         /// <param name="include">Names of parameters to include in binding.</param>
         public BindAttribute(params string[] include)
         {
-            Include = include;
+            Include = new string[0];
+            foreach (var item in include)
+            {
+                Include = Include.Concat(SplitString(item)).ToArray();
+            }
         }
 
         /// <summary>
         /// Creates a new instance of <see cref="BindAttribute"/>.
         /// </summary>
-        /// <param name="predicateProviderType">The type which implements 
+        /// <param name="predicateProviderType">The type which implements
         /// <see cref="IPropertyBindingPredicateProvider"/>.
         /// </param>
         public BindAttribute([NotNull] Type predicateProviderType)
@@ -92,7 +96,7 @@ namespace Microsoft.AspNet.Mvc
                 {
                     if (_predicateFromInclude == null)
                     {
-                        _predicateFromInclude = 
+                        _predicateFromInclude =
                             (context, propertyName) => Include.Contains(propertyName, StringComparer.Ordinal);
                     }
 
@@ -135,6 +139,18 @@ namespace Microsoft.AspNet.Mvc
 
                 return predicate(context, propertyName);
             };
+        }
+
+        private static string[] SplitString(string original)
+        {
+            if (string.IsNullOrEmpty(original))
+            {
+                return new string[0];
+            }
+
+            var split = original.Split(',').Select(piece => piece.Trim()).Where(piece => !string.IsNullOrEmpty(piece));
+
+            return split.ToArray();
         }
     }
 }
