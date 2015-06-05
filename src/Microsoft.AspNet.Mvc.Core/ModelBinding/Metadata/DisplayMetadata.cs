@@ -29,10 +29,10 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
         public string DataTypeName { get; set; }
 
         /// <summary>
-        /// Gets or sets a delegate used for getting the model description.
-        /// See <see cref="ModelMetadata.Description"/>
+        /// Gets or sets a delegate which is used to get a value for the
+        /// model description see <see cref="ModelMetadata.Description"/>.
         /// </summary>
-        public Func<string, string> Description { get; set; }
+        public Func<string> Description { get; set; }
 
         /// <summary>
         /// Gets or sets a display format string for the model.
@@ -41,10 +41,10 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
         public string DisplayFormatString { get; set; }
 
         /// <summary>
-        /// Gets or sets a delegate used for getting the display name for the model.
-        /// See <see cref="ModelMetadata.DisplayName"/>
+        /// Gets or sets a delegate delegate which is used to get a value for the
+        /// display name of the model. See <see cref="ModelMetadata.DisplayName"/>.
         /// </summary>
-        public Func<string, string> DisplayName { get; set; }
+        public Func<string> DisplayName { get; set; }
 
         /// <summary>
         /// Gets or sets an edit format string for the model.

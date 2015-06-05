@@ -72,7 +72,7 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
             // Description
             if (displayAttribute != null)
             {
-                displayMetadata.Description = (propertyName) => displayAttribute.GetDescription();
+                displayMetadata.Description = () => displayAttribute.GetDescription();
             }
 
             // DisplayFormat
@@ -84,7 +84,7 @@ namespace Microsoft.AspNet.Mvc.ModelBinding.Metadata
             // DisplayName
             if (displayAttribute != null)
             {
-                displayMetadata.DisplayName = (propertyName) => displayAttribute.GetName();
+                displayMetadata.DisplayName = () => displayAttribute.GetName();
             }
 
             if (displayFormatAttribute != null && displayFormatAttribute.ApplyFormatInEditMode)
