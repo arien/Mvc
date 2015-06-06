@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.AspNet.Mvc.Core;
@@ -30,11 +31,13 @@ namespace Microsoft.AspNet.Mvc
         /// <param name="include">Names of parameters to include in binding.</param>
         public BindAttribute(params string[] include)
         {
-            Include = new string[0];
+            var items = new List<string>();
             foreach (var item in include)
             {
-                Include = Include.Concat(SplitString(item)).ToArray();
+                items.AddRange(SplitString(item));
             }
+
+            Include = items.ToArray();
         }
 
         /// <summary>
@@ -141,7 +144,7 @@ namespace Microsoft.AspNet.Mvc
             };
         }
 
-        private static string[] SplitString(string original)
+        private static IEnumerable<string> SplitString(string original)
         {
             if (string.IsNullOrEmpty(original))
             {
@@ -150,7 +153,7 @@ namespace Microsoft.AspNet.Mvc
 
             var split = original.Split(',').Select(piece => piece.Trim()).Where(piece => !string.IsNullOrEmpty(piece));
 
-            return split.ToArray();
+            return split;
         }
     }
 }
